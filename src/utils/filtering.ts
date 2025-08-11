@@ -192,7 +192,7 @@ export class FilteringService {
       if (!result[article.source]) {
         result[article.source] = [];
       }
-      result[article.source].push(article);
+      result[article.source]?.push(article);
     }
 
     return result;

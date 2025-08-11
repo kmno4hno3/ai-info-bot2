@@ -122,7 +122,8 @@ export class ArticleCollectorService {
     const errors: CollectionError[] = [];
 
     results.forEach((result, index) => {
-      const collectorName = this.getEnabledSources()[index];
+      const collectorName =
+        this.getEnabledSources()[index] || `collector-${index}`;
 
       if (result.status === 'fulfilled') {
         articles.push(...result.value);
@@ -166,9 +167,13 @@ export class ArticleCollectorService {
 
     // Qiita Collector
     if (this.config.sources.qiita.enabled) {
-      const qiitaCollector = new QiitaCollector({
-        accessToken: this.config.sources.qiita.accessToken,
-      });
+      const qiitaCollector = new QiitaCollector(
+        this.config.sources.qiita.accessToken
+          ? {
+              accessToken: this.config.sources.qiita.accessToken,
+            }
+          : undefined
+      );
 
       collectors.push({
         name: 'Qiita',
@@ -219,9 +224,13 @@ export class ArticleCollectorService {
 
     // Dev.to Collector
     if (this.config.sources.devto.enabled) {
-      const devtoCollector = new DevToCollector({
-        apiKey: this.config.sources.devto.apiKey,
-      });
+      const devtoCollector = new DevToCollector(
+        this.config.sources.devto.apiKey
+          ? {
+              apiKey: this.config.sources.devto.apiKey,
+            }
+          : undefined
+      );
 
       collectors.push({
         name: 'Dev.to',

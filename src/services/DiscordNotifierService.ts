@@ -163,6 +163,7 @@ export class DiscordNotifierService {
 
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
+      if (!batch) continue;
       const embeds = batch.map(article => this.createArticleEmbed(article));
 
       const headerMessage =
@@ -304,7 +305,7 @@ export class DiscordNotifierService {
     await this.sendMessage({ embeds: [embed] });
   }
 
-  private async sendMessage(message: DiscordMessage): Promise<void> {
+  public async sendMessage(message: DiscordMessage): Promise<void> {
     await RetryService.withRetryCondition(
       async () => {
         const response = await axios.post(this.config.webhookUrl, message, {

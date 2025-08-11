@@ -142,7 +142,7 @@ export class RetryService {
     error: Error,
     attempt: number
   ) => boolean {
-    return (error: Error, attempt: number): boolean => {
+    return (error: Error): boolean => {
       // HTTP関連のエラーの場合のリトライ条件
       const errorMessage = error.message.toLowerCase();
 

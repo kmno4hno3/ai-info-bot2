@@ -269,7 +269,7 @@ export class DevToCollector {
         `Dev.to article ${articleId} details`
       );
 
-      return response.data as DevToArticle;
+      return (response as unknown as AxiosResponse<DevToArticle>).data;
     } catch (error) {
       logger.warn(`記事 ${articleId} の詳細取得でエラー`, error);
       return null;

@@ -203,9 +203,12 @@ function parseCommandLineArgs(): { testMode: boolean; source?: string } {
   const args = process.argv.slice(2);
   const testMode = args.includes('--test');
   const sourceIndex = args.indexOf('--source');
-  const source = sourceIndex !== -1 ? args[sourceIndex + 1] : undefined;
+  const source =
+    sourceIndex !== -1 && sourceIndex + 1 < args.length
+      ? args[sourceIndex + 1]
+      : undefined;
 
-  return { testMode, source };
+  return { testMode, ...(source && { source }) };
 }
 
 // テストモードの実行

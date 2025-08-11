@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { parseStringPromise } from 'xml2js';
-import { Article, ZennArticle } from '../types/Article';
+import { Article } from '../types/Article';
 import { logger } from '../utils/logger';
 import { RetryService } from '../utils/retry';
 

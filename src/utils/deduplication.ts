@@ -136,25 +136,31 @@ export class DeduplicationService {
 
     // Initialize first row and column
     for (let i = 0; i <= len1; i++) {
-      matrix[i][0] = i;
+      matrix[i]![0] = i;
     }
     for (let j = 0; j <= len2; j++) {
-      matrix[0][j] = j;
+      matrix[0]![j] = j;
     }
 
     // Fill matrix
     for (let i = 1; i <= len1; i++) {
       for (let j = 1; j <= len2; j++) {
         const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j] + 1, // deletion
-          matrix[i][j - 1] + 1, // insertion
-          matrix[i - 1][j - 1] + cost // substitution
+        const prevRow = matrix[i - 1]!;
+        const currentRow = matrix[i]!;
+        const prevRowJ = prevRow[j] ?? 0;
+        const currentRowJMinus1 = currentRow[j - 1] ?? 0;
+        const prevRowJMinus1 = prevRow[j - 1] ?? 0;
+
+        currentRow[j] = Math.min(
+          prevRowJ + 1, // deletion
+          currentRowJMinus1 + 1, // insertion
+          prevRowJMinus1 + cost // substitution
         );
       }
     }
 
-    const distance = matrix[len1][len2];
+    const distance = matrix[len1]![len2] ?? 0;
     const maxLength = Math.max(len1, len2);
     return 1 - distance / maxLength;
   }

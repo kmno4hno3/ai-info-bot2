@@ -91,13 +91,17 @@ export class ConfigLoader {
       sources: {
         qiita: {
           ...configFile.sources.qiita,
-          accessToken: process.env.QIITA_ACCESS_TOKEN,
+          ...(process.env.QIITA_ACCESS_TOKEN && {
+            accessToken: process.env.QIITA_ACCESS_TOKEN,
+          }),
         },
         zenn: configFile.sources.zenn,
         hackernews: configFile.sources.hackernews,
         devto: {
           ...configFile.sources.devto,
-          apiKey: process.env.DEVTO_API_KEY,
+          ...(process.env.DEVTO_API_KEY && {
+            apiKey: process.env.DEVTO_API_KEY,
+          }),
         },
       },
       discord: {
@@ -108,8 +112,8 @@ export class ConfigLoader {
       filtering: configFile.filtering,
       performance: {
         maxRetries: configFile.performance.maxRetries,
-        baseDelay: configFile.performance.retryDelayMs,
-        backoffMultiplier: 2.0,
+        retryDelayMs: configFile.performance.retryDelayMs,
+        timeoutMs: configFile.performance.timeoutMs,
       },
     };
 
