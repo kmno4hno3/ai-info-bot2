@@ -180,10 +180,13 @@ export class ArticleCollectorService {
         enabled: true,
         collect: async () => {
           const since = this.calculateSinceDate();
-          return qiitaCollector.collectArticles(
+          const articles = await qiitaCollector.collectArticles(
             this.config.sources.qiita.tags,
             since
           );
+          const maxArticles =
+            this.config.sources.qiita.maxArticles || articles.length;
+          return articles.slice(0, maxArticles);
         },
       });
     }
@@ -197,10 +200,13 @@ export class ArticleCollectorService {
         enabled: true,
         collect: async () => {
           const since = this.calculateSinceDate();
-          return zennCollector.collectArticles(
+          const articles = await zennCollector.collectArticles(
             this.config.sources.zenn.topics,
             since
           );
+          const maxArticles =
+            this.config.sources.zenn.maxArticles || articles.length;
+          return articles.slice(0, maxArticles);
         },
       });
     }
@@ -214,10 +220,13 @@ export class ArticleCollectorService {
         enabled: true,
         collect: async () => {
           const since = this.calculateSinceDate();
-          return hackerNewsCollector.collectArticles(
+          const articles = await hackerNewsCollector.collectArticles(
             this.config.sources.hackernews.searchTerms,
             since
           );
+          const maxArticles =
+            this.config.sources.hackernews.maxArticles || articles.length;
+          return articles.slice(0, maxArticles);
         },
       });
     }
@@ -237,10 +246,13 @@ export class ArticleCollectorService {
         enabled: true,
         collect: async () => {
           const since = this.calculateSinceDate();
-          return devtoCollector.collectArticles(
+          const articles = await devtoCollector.collectArticles(
             this.config.sources.devto.tags,
             since
           );
+          const maxArticles =
+            this.config.sources.devto.maxArticles || articles.length;
+          return articles.slice(0, maxArticles);
         },
       });
     }

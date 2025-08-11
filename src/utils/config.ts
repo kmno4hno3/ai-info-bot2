@@ -9,18 +9,22 @@ interface ConfigFile {
     qiita: {
       enabled: boolean;
       tags: string[];
+      maxArticles?: number;
     };
     zenn: {
       enabled: boolean;
       topics: string[];
+      maxArticles?: number;
     };
     hackernews: {
       enabled: boolean;
       searchTerms: string[];
+      maxArticles?: number;
     };
     devto: {
       enabled: boolean;
       tags: string[];
+      maxArticles?: number;
     };
   };
   discord: {

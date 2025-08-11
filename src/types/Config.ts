@@ -5,19 +5,23 @@ export interface Config {
       enabled: boolean;
       tags: string[];
       accessToken?: string;
+      maxArticles?: number;
     };
     zenn: {
       enabled: boolean;
       topics: string[];
+      maxArticles?: number;
     };
     hackernews: {
       enabled: boolean;
       searchTerms: string[];
+      maxArticles?: number;
     };
     devto: {
       enabled: boolean;
       tags: string[];
       apiKey?: string;
+      maxArticles?: number;
     };
   };
   discord: {

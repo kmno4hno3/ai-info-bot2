@@ -327,26 +327,24 @@ interface NotificationService {
 ```json
 {
   "keywords": [
-    "AI", "人工知能", "機械学習", "machine learning", "deep learning",
-    "LLM", "ChatGPT", "GPT", "Transformer", "neural network",
-    "自然言語処理", "NLP", "computer vision", "画像認識"
+    "ChatGPT", "claude", "gemini", "LLM", "GPT","自然言語処理", "NotebookLM", "AI", "人工知能", "機械学習",
   ],
   "sources": {
     "qiita": {
       "enabled": true,
-      "tags": ["AI", "機械学習", "DeepLearning", "NLP", "ChatGPT"]
+      "tags": ["ChatGPT", "Claude", "ClaudeCode", "Gemini", "LLM", "GPT","自然言語処理", "NotebookLM", "AI", "人工知能", "機械学習",]
     },
     "zenn": {
       "enabled": true,
-      "topics": ["ai", "machinelearning", "deeplearning", "nlp", "chatgpt"]
+      "topics": ["ChatGPT", "Claude", "Claude Code", "Gemini", "LLM", "GPT","自然言語処理", "NotebookLM", "AI", "人工知能", "機械学習",]
     },
     "hackernews": {
       "enabled": true,
-      "searchTerms": ["AI", "machine learning", "LLM", "ChatGPT", "OpenAI"]
+      "searchTerms": ["ChatGPT", "claude", "gemini", "LLM", "GPT", "NotebookLM", "AI"]
     },
     "devto": {
       "enabled": true,
-      "tags": ["ai", "machinelearning", "deeplearning", "chatgpt", "opensource"]
+      "tags": ["chatgpt", "claude", "claudecode", "gemini", "llm", "gpt", "notebooklm", "ai"]
     }
   },
   "discord": {

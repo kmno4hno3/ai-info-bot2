@@ -1,106 +1,77 @@
 {
   "keywords": [
+    "ChatGPT",
+    "claude",
+    "gemini",
+    "LLM",
+    "GPT",
+    "自然言語処理",
+    "NotebookLM",
     "AI",
     "人工知能",
-    "機械学習",
-    "machine learning",
-    "deep learning",
-    "ディープラーニング",
-    "LLM",
-    "大規模言語モデル",
-    "ChatGPT",
-    "GPT",
-    "OpenAI",
-    "Claude",
-    "Transformer",
-    "neural network",
-    "ニューラルネットワーク",
-    "自然言語処理",
-    "NLP",
-    "natural language processing",
-    "computer vision",
-    "画像認識",
-    "画像生成",
-    "stable diffusion",
-    "midjourney",
-    "DALL-E",
-    "生成AI",
-    "generative AI",
-    "PyTorch",
-    "TensorFlow",
-    "Hugging Face",
-    "RAG",
-    "fine-tuning",
-    "embedding",
-    "ベクトル検索",
-    "prompt engineering",
-    "AI開発",
-    "MLOps"
+    "機械学習"
   ],
   "sources": {
     "qiita": {
       "enabled": true,
       "tags": [
-        "AI",
-        "機械学習",
-        "DeepLearning",
-        "NLP",
         "ChatGPT",
-        "OpenAI",
+        "Claude",
+        "ClaudeCode",
+        "Gemini",
         "LLM",
+        "GPT",
         "自然言語処理",
-        "Python",
-        "TensorFlow",
-        "PyTorch"
-      ]
+        "NotebookLM",
+        "AI",
+        "人工知能",
+        "機械学習"
+      ],
+      "maxArticles": 5
     },
     "zenn": {
       "enabled": true,
       "topics": [
-        "ai",
-        "machinelearning",
-        "deeplearning",
-        "nlp",
-        "chatgpt",
-        "openai",
-        "llm",
-        "pytorch",
-        "tensorflow",
-        "python"
-      ]
+        "ChatGPT",
+        "Claude",
+        "Claude Code",
+        "Gemini",
+        "LLM",
+        "GPT",
+        "自然言語処理",
+        "NotebookLM",
+        "AI",
+        "人工知能",
+        "機械学習"
+      ],
+      "maxArticles": 5
     },
     "hackernews": {
       "enabled": true,
       "searchTerms": [
-        "AI",
-        "artificial intelligence",
-        "machine learning",
-        "deep learning",
         "ChatGPT",
-        "GPT",
-        "OpenAI",
+        "claude",
+        "gemini",
         "LLM",
-        "large language model",
-        "neural networks",
-        "NLP",
-        "computer vision"
-      ]
+        "GPT",
+        "NotebookLM",
+        "AI"
+      ],
+      "maxArticles": 5
     },
     "devto": {
       "enabled": true,
       "tags": [
-        "ai",
-        "machinelearning",
-        "artificialintelligence",
-        "deeplearning",
         "chatgpt",
-        "openai",
-        "nlp",
-        "pytorch",
-        "tensorflow",
-        "python",
-        "datascience"
-      ]
+        "claude",
+        "claudecode",
+        "gemini",
+        "llm",
+        "gpt",
+        "notebooklm",
+        "ai"
+      ],
+      "maxArticles": 5
     }
   },
   "discord": {
