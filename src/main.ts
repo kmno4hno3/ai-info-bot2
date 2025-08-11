@@ -199,16 +199,41 @@ async function sendErrorNotification(error: unknown): Promise<void> {
 }
 
 // 実行時引数の処理
-function parseCommandLineArgs(): { testMode: boolean; source?: string } {
+function parseCommandLineArgs(): {
+  testMode: boolean;
+  source?: string;
+  help?: boolean;
+} {
   const args = process.argv.slice(2);
   const testMode = args.includes('--test');
+  const help = args.includes('--help') || args.includes('-h');
   const sourceIndex = args.indexOf('--source');
   const source =
     sourceIndex !== -1 && sourceIndex + 1 < args.length
       ? args[sourceIndex + 1]
       : undefined;
 
-  return { testMode, ...(source && { source }) };
+  return { testMode, help, ...(source && { source }) };
+}
+
+// ヘルプメッセージを表示
+function showHelp(): void {
+  console.log(`
+AI記事収集Discord通知Bot
+
+使用方法:
+  npm run dev [オプション]
+
+オプション:
+  --test              テストモード（Discord通知のテスト送信）
+  --source <name>     特定のソースのみ実行 (qiita, zenn, hackernews, devto)
+  --help, -h          このヘルプを表示
+
+例:
+  npm run dev --test
+  npm run dev --source qiita
+  npm run collect
+`);
 }
 
 // テストモードの実行
@@ -255,9 +280,12 @@ async function runSourceSpecific(sourceName: string): Promise<void> {
 
 // メイン実行
 if (require.main === module) {
-  const { testMode, source } = parseCommandLineArgs();
+  const { testMode, source, help } = parseCommandLineArgs();
 
-  if (testMode) {
+  if (help) {
+    showHelp();
+    process.exit(0);
+  } else if (testMode) {
     runTestMode().catch(error => {
       logger.error('テストモード実行でエラー', error);
       process.exit(1);
