@@ -186,7 +186,7 @@ export class ArticleCollectorService {
           );
           const maxArticles =
             this.config.sources.qiita.maxArticles || articles.length;
-          return articles.slice(0, maxArticles);
+          return this.selectTopArticlesByScore(articles, maxArticles);
         },
       });
     }
@@ -206,7 +206,7 @@ export class ArticleCollectorService {
           );
           const maxArticles =
             this.config.sources.zenn.maxArticles || articles.length;
-          return articles.slice(0, maxArticles);
+          return this.selectTopArticlesByScore(articles, maxArticles);
         },
       });
     }
@@ -226,7 +226,7 @@ export class ArticleCollectorService {
           );
           const maxArticles =
             this.config.sources.hackernews.maxArticles || articles.length;
-          return articles.slice(0, maxArticles);
+          return this.selectTopArticlesByScore(articles, maxArticles);
         },
       });
     }
@@ -252,7 +252,7 @@ export class ArticleCollectorService {
           );
           const maxArticles =
             this.config.sources.devto.maxArticles || articles.length;
-          return articles.slice(0, maxArticles);
+          return this.selectTopArticlesByScore(articles, maxArticles);
         },
       });
     }
@@ -264,6 +264,16 @@ export class ArticleCollectorService {
     // デフォルトは過去24時間
     const hoursAgo = 24;
     return new Date(Date.now() - hoursAgo * 60 * 60 * 1000);
+  }
+
+  private selectTopArticlesByScore(
+    articles: Article[],
+    maxCount: number
+  ): Article[] {
+    // スコア順（降順）でソートしてから上位を選択
+    return articles
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
+      .slice(0, maxCount);
   }
 
   private getEnabledSources(): string[] {

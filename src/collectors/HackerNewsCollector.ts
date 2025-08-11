@@ -89,12 +89,13 @@ export class HackerNewsCollector {
           tags: 'story', // ストーリーのみ（コメントは除外）
           hitsPerPage: this.config.hitsPerPage,
           page: page,
+          numericFilters: 'points>5', // 5ポイント以上の記事のみ
         };
 
         // 日付フィルターを追加（過去30日など）
         if (since) {
           const sinceTimestamp = Math.floor(since.getTime() / 1000);
-          params.numericFilters = `created_at_i>${sinceTimestamp}`;
+          params.numericFilters = `points>5,created_at_i>${sinceTimestamp}`;
         }
 
         logger.debug(`HackerNews Algolia API呼び出し: ページ ${page}`, params);

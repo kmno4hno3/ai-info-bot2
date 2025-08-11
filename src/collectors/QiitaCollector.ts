@@ -75,7 +75,7 @@ export class QiitaCollector {
           query: `tag:${tag}`,
           per_page: this.config.itemsPerPage,
           page: page,
-          sort: 'created',
+          sort: 'likes',
         });
 
         if (!response.data || response.data.length === 0) {
