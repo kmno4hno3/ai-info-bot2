@@ -78,7 +78,11 @@ export class ConfigLoader {
       logger.debug('設定ファイル解析完了', { path: this.CONFIG_FILE_PATH });
       return configFile;
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      if (
+        error instanceof Error &&
+        'code' in error &&
+        error.code === 'ENOENT'
+      ) {
         throw new Error(`Config file not found: ${this.CONFIG_FILE_PATH}`);
       }
       throw new Error(`Config file parsing failed: ${String(error)}`);

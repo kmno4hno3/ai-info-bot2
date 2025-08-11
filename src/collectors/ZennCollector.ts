@@ -175,7 +175,7 @@ export class ZennCollector {
     const author = item['dc:creator']?.[0] || item.author?.[0] || 'Unknown';
 
     // IDをURLから抽出
-    const urlMatch = url.match(/\/([^\/]+)$/);
+    const urlMatch = url.match(/\/([^/]+)$/);
     const id = urlMatch ? urlMatch[1] : `zenn-${Date.now()}`;
 
     return {

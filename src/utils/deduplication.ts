@@ -99,7 +99,7 @@ export class DeduplicationService {
         // 特殊文字の除去
         .replace(/[^\w\s\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '')
         // 年月日の正規化
-        .replace(/\d{4}[年\/\-]\d{1,2}[月\/\-]\d{1,2}[日]?/g, 'YYYY-MM-DD')
+        .replace(/\d{4}[年/-]\d{1,2}[月/-]\d{1,2}[日]?/g, 'YYYY-MM-DD')
         // バージョン番号の正規化
         .replace(/v?\d+\.\d+(\.\d+)?/g, 'vX.X.X')
     );
