@@ -1,0 +1,172 @@
+name: Daily Article Collection
+
+on:
+  schedule:
+    # UTC 0:00 (JST 9:00) に日次実行
+    - cron: '0 0 * * *'
+  
+  # 手動実行も可能
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Run in test mode'
+        required: false
+        default: 'false'
+        type: boolean
+      source:
+        description: 'Collect from specific source only (qiita, zenn, hackernews, devto)'
+        required: false
+        type: string
+
+jobs:
+  collect-articles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+        env:
+          NODE_ENV: test
+
+      - name: Run type check
+        run: npm run typecheck
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Collect articles (Test Mode)
+        if: ${{ github.event.inputs.test_mode == 'true' }}
+        run: npm run dev -- --test
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          QIITA_ACCESS_TOKEN: ${{ secrets.QIITA_ACCESS_TOKEN }}
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          NODE_ENV: production
+
+      - name: Collect articles (Specific Source)
+        if: ${{ github.event.inputs.source != '' }}
+        run: npm run dev -- --source ${{ github.event.inputs.source }}
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          QIITA_ACCESS_TOKEN: ${{ secrets.QIITA_ACCESS_TOKEN }}
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          NODE_ENV: production
+
+      - name: Collect articles (Normal Mode)
+        if: ${{ github.event.inputs.test_mode != 'true' && github.event.inputs.source == '' }}
+        run: npm run collect
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          QIITA_ACCESS_TOKEN: ${{ secrets.QIITA_ACCESS_TOKEN }}
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          NODE_ENV: production
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: execution-logs-${{ github.run_number }}
+          path: |
+            *.log
+            logs/
+          retention-days: 7
+
+  notify-failure:
+    runs-on: ubuntu-latest
+    needs: collect-articles
+    if: failure()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Send failure notification
+        run: |
+          cat << 'EOF' | node -e "
+          const { DiscordNotifierService } = require('./dist/services/DiscordNotifierService');
+          
+          const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+          if (!webhookUrl) {
+            console.error('DISCORD_WEBHOOK_URL not found');
+            process.exit(1);
+          }
+          
+          const discord = new DiscordNotifierService(webhookUrl);
+          
+          const embed = {
+            title: '🚨 GitHub Actions 実行失敗',
+            description: 'AI記事収集の定期実行が失敗しました。',
+            url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}',
+            color: 0xff0000,
+            timestamp: new Date().toISOString(),
+            author: { name: 'GitHub Actions' },
+            fields: [
+              {
+                name: '📅 実行時刻',
+                value: new Date().toLocaleString('ja-JP'),
+                inline: true
+              },
+              {
+                name: '🔗 ログ',
+                value: '[View Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})',
+                inline: true
+              },
+              {
+                name: '💡 対処',
+                value: 'ログを確認して問題を解決してください',
+                inline: false
+              }
+            ],
+            footer: { text: 'GitHub Actions Alert' }
+          };
+          
+          discord.sendMessage({ embeds: [embed] })
+            .then(() => console.log('失敗通知を送信しました'))
+            .catch(err => {
+              console.error('通知送信に失敗:', err);
+              process.exit(1);
+            });
+          "
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+  health-check:
+    runs-on: ubuntu-latest
+    needs: collect-articles
+    if: success()
+    
+    steps:
+      - name: Log successful execution
+        run: |
+          echo "✅ AI記事収集が正常に完了しました"
+          echo "実行時刻: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          echo "リポジトリ: ${{ github.repository }}"
+          echo "実行ID: ${{ github.run_id }}"
